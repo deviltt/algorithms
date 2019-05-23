@@ -1,9 +1,7 @@
 package Std;
 
-import java.util.InputMismatchException;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.BufferedInputStream;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public final class StdIn {
@@ -189,7 +187,7 @@ public final class StdIn {
 //            if ("false".equalsIgnoreCase(token)) return false;
 //            if ("1".equals(token)) return true;
 //            if ("0".equals(token)) return false;
-            switch (token){
+            switch (token) {
                 case "true":
                     return true;
                 case "false":
@@ -203,9 +201,110 @@ public final class StdIn {
                             + "but the next token is\"" + token + "\"");
             }
 
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             throw new NoSuchElementException("attempts to read an 'byte' value from standard input, "
                     + "but no more tokens are available");
         }
+    }
+
+    /**
+     * @return 返回字符串数组
+     */
+    public static String[] readAllStrings() {
+        //如果读取的所有字符串是由空格开头，则字符串数组的第一位为""
+        String[] tokens = WHITESPACE_PATTERN.split(readAll());
+        //所以只要第一位长度大于0肯定不是以空格开头，直接返回
+        if (tokens.length == 0 || tokens[0].length() > 0)
+            return tokens;
+        String[] temp = new String[tokens.length - 1];
+        for (int i = 0; i < tokens.length - 1; i++) {
+            temp[i] = tokens[i + 1];
+        }
+        return temp;
+    }
+
+    /**
+     * @return 数组中保存的每一行的字符串
+     */
+    public static String[] readAllLines() {
+        ArrayList<String> lines = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            lines.add(readLine());
+        }
+        return lines.toArray(new String[0]);    //集合转数组toArray();
+    }
+
+    /**
+     * 前提是所有字符串都是数字形式的
+     *
+     * @return 将输入的数字形式的字符串转化为整型后输出
+     */
+    public static int[] readAllInts() {
+        //先读取所有的字符串
+        String[] tokens = readAllStrings();
+        int[] vals = new int[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            vals[i] = Integer.parseInt(tokens[i]);
+        }
+        return vals;
+    }
+
+    public static long[] readAllLongs() {
+        //先读取所有的字符串
+        String[] tokens = readAllStrings();
+        long[] vals = new long[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            vals[i] = Long.parseLong(tokens[i]);
+        }
+        return vals;
+    }
+
+    public static double[] readAllDoubles() {
+        //先读取所有的字符串
+        String[] tokens = readAllStrings();
+        double[] vals = new double[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            vals[i] = Double.parseDouble(tokens[i]);
+        }
+        return vals;
+    }
+
+    static {
+        resync();
+    }
+
+    /**
+     * 使用字节缓冲流从标准输入流中读取内容
+     */
+    private static void resync() {
+        setScanner(new Scanner(new BufferedInputStream(System.in), CHARSET_NAME));
+    }
+
+    private static void setScanner(Scanner scanner) {
+        StdIn.scanner = scanner;
+        StdIn.scanner.useLocale(LOCALE);
+    }
+
+    /**
+     * @return
+     * @Deprecated 注解表示该方法仍可以调用，但过时，不推荐
+     */
+    @Deprecated
+    public static int[] readInts() {
+        return readAllInts();
+    }
+
+    @Deprecated
+    public static double[] readDoubles() {
+        return readAllDoubles();
+    }
+
+    @Deprecated
+    public static String[] readStrings() {
+        return readAllStrings();
+    }
+
+    public static void main(String[] args) {
+
     }
 }
