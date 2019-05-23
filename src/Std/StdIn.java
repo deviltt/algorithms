@@ -141,6 +141,19 @@ public final class StdIn {
         }
     }
 
+    public static double readDouble() {
+        try {
+            return scanner.nextDouble();
+        } catch (InputMismatchException e) {
+            String token = scanner.next();
+            throw new InputMismatchException("attempts to read an 'double' value from standard input, "
+                    + "but the next token is\"" + token + "\"");
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("attempts to read an 'double' value from standard input, "
+                    + "but no more tokens are available");
+        }
+    }
+
     public static double readLong() {
         try {
             return scanner.nextLong();
@@ -305,6 +318,24 @@ public final class StdIn {
     }
 
     public static void main(String[] args) {
+        StdOut.print("Type a string: ");
+        String s = StdIn.readString();  //一次只读一个字符串
+        StdOut.println("Your string was: " + s);
+        StdOut.println();   //自动刷新缓冲区 如果输入的是aaa bbb，没有刷新缓冲区的话，314行会直接读取缓冲区中剩余的内容，会报InputMismatchException的错误
 
+        StdOut.print("Type an int: ");
+        int a = StdIn.readInt();
+        StdOut.println("Your int was: " + a);
+        StdOut.println();
+
+        StdOut.print("Type a boolean: ");
+        boolean b = StdIn.readBoolean();
+        StdOut.println("Your boolean was: " + b);
+        StdOut.println();
+
+        StdOut.println("Type a double: ");
+        double c = StdIn.readDouble();
+        StdOut.println("Your double was: " + c);
+        StdOut.println();
     }
 }
