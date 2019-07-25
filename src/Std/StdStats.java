@@ -1,5 +1,8 @@
 package Std;
 
+/**
+ * 还差几个关于StdDraw的方法
+ */
 public final class StdStats {
     private StdStats() {
     }
